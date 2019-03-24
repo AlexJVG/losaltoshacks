@@ -1,4 +1,4 @@
-<template>
+<template id="app">
   <v-app>
     <v-toolbar dense>
       <v-toolbar-title class="ml-0 pl-3">
@@ -334,3 +334,10 @@
     }
   }
 </script>
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Roboto:500');
+  #app{
+    font-family: 'Roboto', sans-serif;
+  }
+
+</style>
