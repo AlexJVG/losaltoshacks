@@ -119,7 +119,8 @@
         movies:[],
         currentMovie: 0,
         currentMovieRating: 1,
-        currentMovieDistance: null
+        currentMovieDistance: null,
+        currentPage: 1,
       }
     },
     components: {
@@ -135,7 +136,29 @@
     created(){
       this.loadMovies();
     },
+    mounted(){
+      this.scroll();
+    },
     methods:{
+      scroll(){
+        window.onscroll = () => {
+        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
+        if (bottomOfWindow) {
+          this.currentPage++;
+          axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${this.currentPage}`)
+          .then(result => {
+            let movie = result.data.results;
+            for(let i =0;i<movie.length;i++){
+              this.movies.push(movie[i]);
+            }
+            console.log(result.data);
+          }).catch(error => {
+            console.log(error)
+          });
+        }
+        };
+      },
       movieDistance(){
         axios.post(`http://${server}/api/personal-rating`,
           JSON.stringify({
@@ -186,6 +209,46 @@
         }).catch(error => {
           console.log(error)
         });
+        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2`)
+        // .then(result => {
+        //   let movie = result.data.results;
+        //   for(let i =0;i<movie.length;i++){
+        //     this.movies.push(movie[i]);
+        //   }
+        //   console.log(result.data);
+        // }).catch(error => {
+        //   console.log(error)
+        // });
+        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=3`)
+        // .then(result => {
+        //   let movie = result.data.results;
+        //   for(let i =0;i<movie.length;i++){
+        //     this.movies.push(movie[i]);
+        //   }
+        //   console.log(result.data);
+        // }).catch(error => {
+        //   console.log(error)
+        // });
+        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=4`)
+        // .then(result => {
+        //   let movie = result.data.results;
+        //   for(let i =0;i<movie.length;i++){
+        //     this.movies.push(movie[i]);
+        //   }
+        //   console.log(result.data);
+        // }).catch(error => {
+        //   console.log(error)
+        // });
+        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=5`)
+        // .then(result => {
+        //   let movie = result.data.results;
+        //   for(let i =0;i<movie.length;i++){
+        //     this.movies.push(movie[i]);
+        //   }
+        //   console.log(result.data);
+        // }).catch(error => {
+        //   console.log(error)
+        // });
       },
       dialog(){
         this.loginDialog = true;
