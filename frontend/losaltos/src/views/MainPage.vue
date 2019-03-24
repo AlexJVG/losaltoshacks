@@ -20,7 +20,7 @@
         <v-flex class="text-xs-center " style="padding-top: 15%">
           <h3 class="display-3 white--text">MovieMe</h3>
           <span class="subheading white--text"
-            >CUSTUM MOVIE RATINGS BY THE PEOPLE, FOR THE PEOPLE
+            >CUSTOM MOVIE RATINGS BY THE PEOPLE, FOR THE PEOPLE
           </span>
         </v-flex>
       </v-layout>
@@ -116,7 +116,7 @@
                   >Sign Up</v-card-title
                 >
                 <v-text-field
-                  label="Email"
+                  label="Username"
                   v-model="username"
                   :rules="[rules.required]"
                 ></v-text-field>
@@ -149,7 +149,7 @@
                   >Login</v-card-title
                 >
                 <v-text-field
-                  label="Email"
+                  label="Username"
                   v-model="username"
                   :rules="[rules.required]"
                 ></v-text-field>
@@ -345,7 +345,7 @@ export default {
             headers: { "Content-type": "application/json" }
           }
         )
-        .then(result=> {
+        .then(result => {
           console.log("work");
           console.log(result);
           this.currentMovieRating = 0.5;

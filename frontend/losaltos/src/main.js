@@ -1,5 +1,5 @@
 import Vue from "vue";
-import './plugins/vuetify'
+import "./plugins/vuetify";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -22,7 +22,7 @@ import Vuetify, {
   VCardTitle,
   VDialog,
   VNavigationDrawer
-} from 'vuetify/lib';
+} from "vuetify/lib";
 Vue.use(Vuetify, {
   components: {
     VApp,
@@ -43,8 +43,9 @@ Vue.use(Vuetify, {
     VCardTitle,
     VDialog,
     VNavigationDrawer
-  }});
-import 'vuetify/dist/vuetify.min.css';
+  }
+});
+import "vuetify/dist/vuetify.min.css";
 
 Vue.config.productionTip = false;
 
