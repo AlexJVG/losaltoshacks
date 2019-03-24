@@ -347,6 +347,7 @@ export default {
         )
         .then(result=> {
           console.log("work");
+          console.log(result);
           this.currentMovieRating = 0.5;
           this.movieDialog = false;
         })
