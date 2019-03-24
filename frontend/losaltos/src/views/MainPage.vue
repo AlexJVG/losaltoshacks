@@ -8,8 +8,7 @@
       <v-spacer></v-spacer>
       <v-btn @click.stop="dialog()" flat>Login</v-btn>
     </v-toolbar>
-    <v-img :src="require('@/assets/pulp-fiction.jpg')" class = "ma-5" gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
->
+      <v-img :src="require('@/assets/pulp-fiction.jpg')" class = "ma-5" gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)">
      <v-layout row wrap align-center>
                 <v-flex class="text-xs-center " style="padding-top: 15%">
                   <h3 class="display-3 white--text">MovieMe</h3>
@@ -31,10 +30,15 @@
 
               " @click="movieDia(j-1)":src="`http://image.tmdb.org/t/p/w500/${movies[j-1].poster_path}`"></v-img>
             </v-hover>
+              <v-layout align-center justify-center>
               <div class="mt-2">
                 <span >{{movies[j-1].title}}</span>
               </div>
+              </v-layout>
           </v-flex>
+        </v-layout>
+        <v-layout align-center justify-center>
+          <v-btn @click="manual()">Load More</v-btn>
         </v-layout>
       </v-layout>
     </v-container>
@@ -142,9 +146,11 @@
     methods:{
       scroll(){
         window.onscroll = () => {
-        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+        console.log('please')
+        let bottomOfWindow = (document.documentElement.scrollTop||document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight;
 
         if (bottomOfWindow) {
+          console.log("please2")
           this.currentPage++;
           axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${this.currentPage}`)
           .then(result => {
@@ -158,6 +164,19 @@
           });
         }
         };
+      },
+      manual(){
+        this.currentPage++;
+        axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${this.currentPage}`)
+        .then(result => {
+          let movie = result.data.results;
+          for(let i =0;i<movie.length;i++){
+            this.movies.push(movie[i]);
+          }
+          console.log(result.data);
+        }).catch(error => {
+          console.log(error)
+        });
       },
       movieDistance(){
         axios.post(`http://${server}/api/personal-rating`,
