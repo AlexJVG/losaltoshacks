@@ -53,8 +53,8 @@
             <v-card-title class="headline">{{movies[currentMovie].title}}</v-card-title>
             <v-chip v-for="item in genres" :key="item.id">{{show(item.name)}}</v-chip>
             <v-card-text>{{movies[currentMovie].overview}}</v-card-text>
-            <span>{{Number((currentMovieDistant).toFixed(2))}}%</span>
-            <v-rating v-model="currentMovieRating" half-increments length="5" hover ></v-rating>
+            <v-progress-circular :rotate="90" :size="100" color="primary" :width="15" :value="Number((currentMovieDistant).toFixed(2))">{{ Number((currentMovieDistant).toFixed(2)) }}</v-progress-circular>
+            <v-rating v-model="currentMovieRating" half-increments length="5" hover></v-rating>
             <v-card-actions>
               <v-btn @click.stop="ratingData()">Rate</v-btn>
             </v-card-actions>
@@ -217,8 +217,16 @@
         .then(result => {
           console.log("work");
           console.log(result.data);
-          if (result.data.data == null){
+          if (result.data.data == null || result.data.data == "idk"){
             this.currentMovieDistance = 0;
+            axios.get(`https://api.themoviedb.org/3/movie/${this.movies[this.currentMovie].id}?api_key=ce54eab5f21943ef32228205704ddaf4`)
+            .then(result => {
+              console.log("average");
+              console.log(result.data.vote_average);
+              this.currentMovieDistance=result.data.vote_average*10;
+            }).catch(error => {
+              console.log(error)
+            });
           }else{
             this.currentMovieDistance = result.data.data;
           }
@@ -241,6 +249,7 @@
         })
         .then(result => {
           console.log("work");
+          this.currentMovieRating=.5;
           this.movieDialog = false;
         }).catch(error => {
           console.log(error)
