@@ -45,6 +45,7 @@
           <v-img contain height="400px" @click="movieDia(j-1)" :src="`http://image.tmdb.org/t/p/w500/${movieUrl()}`" ></v-img>
           <v-card>
             <v-rating v-model="currentMovieRating" length="10" hover></v-rating>
+            <span>{{currentMovieDistant}}</span>
             <v-card-actions>
               <v-btn @click.stop="ratingData()">Rate</v-btn>
             </v-card-actions>
@@ -118,6 +119,7 @@
         movies:[],
         currentMovie: 0,
         currentMovieRating: 1,
+        currentMovieDistance: null
       }
     },
     components: {
@@ -125,12 +127,31 @@
     computed:{
       moviesLength(){
         return this.movies.length;
+      },
+      currentMovieDistant(){
+        return this.currentMovieDistance;
       }
     },
     created(){
       this.loadMovies();
     },
     methods:{
+      movieDistance(){
+        axios.post(`http://${server}/api/personal-rating`,
+          JSON.stringify({
+            movieId: this.movies[this.currentMovie].id,
+            username: this.$store.state.username
+          }),
+        {
+          headers: { "Content-type": "application/json" }
+        })
+        .then(result => {
+          console.log("work");
+          this.currentMovieDistance = result.data.data;
+        }).catch(error => {
+          console.log(error)
+        });
+      },
       ratingData(){
         console.log("running");
         axios.post(`http://${server}/api/rate-movie`,
@@ -172,6 +193,7 @@
       movieDia(movie){
         this.movieDialog =true;
         this.currentMovie = movie;
+        this.movieDistance();
       },
       signUp(){
         if(!this.signup){
