@@ -10,7 +10,7 @@
       <span v-if="loggedIn">{{this.$store.state.username}}</span>
       <v-btn v-if="loggedIn" @click.stop="logout()" flat>Log Out</v-btn>
     </v-toolbar>
-      <v-img :src="require('@/assets/pulp-fiction.jpg')" class = "ma-5" gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)">
+      <v-img :src="require('@/assets/pulp-fiction.jpg')" class = "ma-5 elevation-24" gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)">
      <v-layout row wrap align-center>
                 <v-flex class="text-xs-center " style="padding-top: 15%">
                   <h3 class="display-3 white--text">MovieMe</h3>
