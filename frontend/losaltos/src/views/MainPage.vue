@@ -128,7 +128,7 @@
         movies:[],
         currentMovie: 0,
         currentMovieRating: 1,
-        currentMovieDistance: null,
+        currentMovieDistance: 0,
         currentPage: 1,
         loggedIn: false,
         genres:[]
