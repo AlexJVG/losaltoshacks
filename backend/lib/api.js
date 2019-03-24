@@ -48,6 +48,10 @@ router.post('/personal-rating', async (req, res) => {
     let user = (await firebase.database().ref('/users/' + username).once('value')).val();
     let movie = (await firebase.database().ref('/movies/' + movieId).once('value')).val();
 
+    if (!movie) {
+        return res.send(responses.success('idk'));
+    }
+    
     let distanceFromMovie = distance(movie.weights, user.weights || {});
     let genresComparing = commonKeys(movie.weights, user.weights || {});
     let maxDistance = genresComparing ** .5;
@@ -73,8 +77,6 @@ router.post('/rate-movie', async (req, res) => {
     let { movieId, genres, databaseRating, userRating, username } = req.body;
 
     userRating = userRating / 10;
-
-    console.log(req.body);
     
     let user = (await firebase.database().ref('/users/' + username).once('value')).val();
     let movie = (await firebase.database().ref('/movies/' + movieId).once('value')).val();
@@ -92,7 +94,7 @@ router.post('/rate-movie', async (req, res) => {
         databaseRating = databaseRating / 10;
 
         for (let i = 0; i < genres.length; i++) {
-            weights[genres[i]] = [ databaseRating ];
+            weights[genres[i]] = (new Array(50)).fill(databaseRating);
         }
 
         movie = {
@@ -108,16 +110,17 @@ router.post('/rate-movie', async (req, res) => {
         let userGenres = Object.keys(user.weights || {});
 
         let distanceFromMovie = distance(weights, user.weights || {});
+        distanceFromMovie = 1; // temp
 
         for (let i = 0; i < userGenres.length; i++) {
-            let genre = userGenres[i];
-            let currentValForGenre = average(weights[genre] || []);
+            let genre = userGenres[i]; // number
+            let currentValForGenre = average(weights[genre] || []); // gets the average value for that movie
             let delta = userRating - currentValForGenre;
             console.log(distanceFromMovie);
-            let value = (delta / distanceFromMovie) * average(user.weights[genre]);
+            let value = (delta / distanceFromMovie)/*  * average(user.weights[genre]) */;
             value += currentValForGenre;
 
-            value = sigmoid(value);
+            // value = sigmoid(value);
 
             if (!weights[genre]) {
                 weights[genre] = [];
@@ -131,7 +134,7 @@ router.post('/rate-movie', async (req, res) => {
     
     {
         // adjust the user's weights
-        let movieGenres = Object.keys(movie.weights);
+        let movieGenres = Object.keys(movie.weights); // bunch of numbers for active genres of the movie
 
         if (!newUser.weights) {
             newUser.weights = {};
