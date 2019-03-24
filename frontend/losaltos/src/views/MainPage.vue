@@ -1,10 +1,10 @@
 <template id="app">
   <v-app dark>
     <v-toolbar dense>
-      <v-toolbar-title class="ml-0 pl-3">
+      <!-- <v-toolbar-title class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="sideBar = !sideBar"></v-toolbar-side-icon>
       </v-toolbar-title>
-      <v-text-field solo flat prepend-inner-icon="search"></v-text-field>
+      <v-text-field solo flat prepend-inner-icon="search"></v-text-field> -->
       <v-spacer></v-spacer>
       <v-btn v-if="!loggedIn" @click.stop="dialog()" flat>Login</v-btn>
       <span v-if="loggedIn">{{this.$store.state.username}}</span>
