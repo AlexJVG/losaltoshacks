@@ -217,8 +217,16 @@
         .then(result => {
           console.log("work");
           console.log(result.data);
-          if (result.data.data == null){
+          if (result.data.data == null || result.data.data == "idk"){
             this.currentMovieDistance = 0;
+            axios.get(`https://api.themoviedb.org/3/movie/${this.movies[this.currentMovie].id}?api_key=ce54eab5f21943ef32228205704ddaf4`)
+            .then(result => {
+              console.log("average");
+              console.log(result.data.vote_average);
+              this.currentMovieDistance=result.data.vote_average*10;
+            }).catch(error => {
+              console.log(error)
+            });
           }else{
             this.currentMovieDistance = result.data.data;
           }
