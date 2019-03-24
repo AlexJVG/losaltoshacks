@@ -45,16 +45,16 @@
       </v-layout>
     </v-container>
 
-    <v-dialog v-model="movieDialog" width="35%">
+    <v-dialog v-model="movieDialog" width="57%">
       <v-container>
-        <v-layout column>
-          <v-img contain height="400px" @click="movieDia(j-1)" :src="`http://image.tmdb.org/t/p/w500/${movieUrl()}`" ></v-img>
-          <v-card>
+        <v-layout rows>
+          <v-img contain height="600px" @click="movieDia(j-1)" :src="`http://image.tmdb.org/t/p/w500/${movieUrl()}`" ></v-img>
+          <v-card width='50%'>
             <v-card-title class="headline">{{movies[currentMovie].title}}</v-card-title>
             <v-chip v-for="item in genres" :key="item.id">{{show(item.name)}}</v-chip>
             <v-card-text>{{movies[currentMovie].overview}}</v-card-text>
             <span>{{Number((currentMovieDistant).toFixed(2))}}%</span>
-            <v-rating v-model="currentMovieRating" half-increments length="5" hover></v-rating>
+            <v-rating v-model="currentMovieRating" half-increments length="5" hover ></v-rating>
             <v-card-actions>
               <v-btn @click.stop="ratingData()">Rate</v-btn>
             </v-card-actions>
