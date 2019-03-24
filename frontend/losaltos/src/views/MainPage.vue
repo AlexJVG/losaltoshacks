@@ -5,6 +5,7 @@
         <v-toolbar-side-icon @click.stop="sideBar = !sideBar"></v-toolbar-side-icon>
       </v-toolbar-title>
       <v-text-field solo flat prepend-inner-icon="search"></v-text-field> -->
+      <v-avatar><img :src="require('@/assets/test.png')"></v-avatar>
       <v-spacer></v-spacer>
       <v-btn v-if="!loggedIn" @click.stop="dialog()" flat>Login</v-btn>
       <span v-if="loggedIn">{{this.$store.state.username}}</span>
@@ -57,7 +58,7 @@
             <v-progress-circular class="text-xs-center " :rotate="90" :size="100" color="primary" :width="15" :value="Number((currentMovieDistant).toFixed(2))">{{ Number((currentMovieDistant).toFixed(2)) }}</v-progress-circular>
             </div>
             <v-rating  class="text-xs-center " v-model="currentMovieRating" half-increments length="5" hover></v-rating>
-            <v-layout align-center justify-center style="padding-top: 10%"> 
+            <v-layout align-center justify-center style="padding-top: 10%">
 
             <v-card-actions >
                 <v-btn  @click.stop="ratingData()">Rate</v-btn>
