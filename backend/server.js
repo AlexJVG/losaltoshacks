@@ -15,6 +15,6 @@ app.use((req, res, next) => {
 
 app.use('/api', require('./lib/api'));
 
-app.listen(8080, () => {
+app.listen(4040, () => {
     console.log(`Server started on port 8080`);
 });

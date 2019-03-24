@@ -6,7 +6,9 @@
       </v-toolbar-title>
       <v-text-field solo flat prepend-inner-icon="search"></v-text-field>
       <v-spacer></v-spacer>
-      <v-btn @click.stop="dialog()" flat>Login</v-btn>
+      <v-btn v-if="!loggedIn" @click.stop="dialog()" flat>Login</v-btn>
+      <span v-if="loggedIn">{{this.$store.state.username}}</span>
+      <v-btn v-if="loggedIn" @click.stop="logout()" flat>Log Out</v-btn>
     </v-toolbar>
       <v-img :src="require('@/assets/pulp-fiction.jpg')" class = "ma-5" gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)">
      <v-layout row wrap align-center>
@@ -48,8 +50,11 @@
         <v-layout column>
           <v-img contain height="400px" @click="movieDia(j-1)" :src="`http://image.tmdb.org/t/p/w500/${movieUrl()}`" ></v-img>
           <v-card>
-            <v-rating v-model="currentMovieRating" length="10" hover></v-rating>
-            <span>{{currentMovieDistant}}</span>
+            <v-card-title class="headline">{{movies[currentMovie].title}}</v-card-title>
+            <v-chip v-for="item in genres" :key="item.id">{{show(item.name)}}</v-chip>
+            <v-card-text>{{movies[currentMovie].overview}}</v-card-text>
+            <span>{{Number((currentMovieDistant).toFixed(2))}}%</span>
+            <v-rating v-model="currentMovieRating" half-increments length="5" hover></v-rating>
             <v-card-actions>
               <v-btn @click.stop="ratingData()">Rate</v-btn>
             </v-card-actions>
@@ -125,6 +130,8 @@
         currentMovieRating: 1,
         currentMovieDistance: null,
         currentPage: 1,
+        loggedIn: false,
+        genres:[]
       }
     },
     components: {
@@ -139,11 +146,31 @@
     },
     created(){
       this.loadMovies();
+      if(!(this.$store.state.username=="")){
+        this.loggedIn = true;
+      }
     },
     mounted(){
       this.scroll();
     },
     methods:{
+      show(thing){
+        console.log(thing);
+        return thing;
+      },
+      genreName(movieId){
+        axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=ce54eab5f21943ef32228205704ddaf4`)
+        .then(result => {
+          console.log(result.data.genres);
+          this.genres=result.data.genres;
+        }).catch(error => {
+          console.log(error)
+        });
+      },
+      logout(){
+        this.$store.commit("setUser","");
+        this.loggedIn = false;
+      },
       scroll(){
         window.onscroll = () => {
         console.log('please')
@@ -189,6 +216,7 @@
         })
         .then(result => {
           console.log("work");
+          console.log(result.data);
           this.currentMovieDistance = result.data.data;
         }).catch(error => {
           console.log(error)
@@ -201,7 +229,7 @@
             movieId: this.movies[this.currentMovie].id,
             genres: this.movies[this.currentMovie].genre_ids,
             databaseRating: this.movies[this.currentMovie].vote_average,
-            userRating: this.currentMovieRating,
+            userRating: this.currentMovieRating*2,
             username: this.$store.state.username
           }),
         {
@@ -228,46 +256,6 @@
         }).catch(error => {
           console.log(error)
         });
-        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=2`)
-        // .then(result => {
-        //   let movie = result.data.results;
-        //   for(let i =0;i<movie.length;i++){
-        //     this.movies.push(movie[i]);
-        //   }
-        //   console.log(result.data);
-        // }).catch(error => {
-        //   console.log(error)
-        // });
-        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=3`)
-        // .then(result => {
-        //   let movie = result.data.results;
-        //   for(let i =0;i<movie.length;i++){
-        //     this.movies.push(movie[i]);
-        //   }
-        //   console.log(result.data);
-        // }).catch(error => {
-        //   console.log(error)
-        // });
-        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=4`)
-        // .then(result => {
-        //   let movie = result.data.results;
-        //   for(let i =0;i<movie.length;i++){
-        //     this.movies.push(movie[i]);
-        //   }
-        //   console.log(result.data);
-        // }).catch(error => {
-        //   console.log(error)
-        // });
-        // axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=ce54eab5f21943ef32228205704ddaf4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=5`)
-        // .then(result => {
-        //   let movie = result.data.results;
-        //   for(let i =0;i<movie.length;i++){
-        //     this.movies.push(movie[i]);
-        //   }
-        //   console.log(result.data);
-        // }).catch(error => {
-        //   console.log(error)
-        // });
       },
       dialog(){
         this.loginDialog = true;
@@ -275,6 +263,7 @@
       movieDia(movie){
         this.movieDialog =true;
         this.currentMovie = movie;
+        this.genreName(this.movies[this.currentMovie].id)
         this.movieDistance();
       },
       signUp(){
@@ -284,6 +273,7 @@
           //send account info
           if (this.$refs.signUpForm.validate()) {
             this.$store.commit("setUser",this.username);
+            this.loggedIn=true;
             axios.post(`http://${server}/api/create-account`,
               JSON.stringify({
                 username: this.username,
@@ -317,6 +307,7 @@
               console.log(result.data);
               if(result.data.data){
                 this.$store.commit("setUser",this.username);
+                this.loggedIn=true;
                 this.loginDialog=false;
               }else{
 
