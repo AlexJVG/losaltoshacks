@@ -1,11 +1,10 @@
 <template id="app">
   <v-app dark>
     <v-toolbar dense>
-      <v-toolbar-title class="ml-0 pl-3">
-        <!-- <v-toolbar-side-icon @click.stop="sideBar = !sideBar"></v-toolbar-side-icon> -->
-        <v-avatar><img :src="require('@/assets/test.png')"></v-avatar>
+      <!-- <v-toolbar-title class="ml-0 pl-3">
+        <v-toolbar-side-icon @click.stop="sideBar = !sideBar"></v-toolbar-side-icon>
       </v-toolbar-title>
-      <!-- <v-text-field solo flat prepend-inner-icon="search"></v-text-field> -->
+      <v-text-field solo flat prepend-inner-icon="search"></v-text-field> -->
       <v-spacer></v-spacer>
       <v-btn v-if="!loggedIn" @click.stop="dialog()" flat>Login</v-btn>
       <span v-if="loggedIn">{{this.$store.state.username}}</span>
@@ -21,7 +20,7 @@
     </v-img>
 
 
-    <v-container grid-list-xl fluid>
+     <v-container grid-list-xl fluid>
         <v-layout row wrap>
           <v-flex v-for="j in moviesLength" xs3 class = "pa-4">
             <v-hover>
@@ -35,7 +34,7 @@
             </v-hover>
               <v-layout align-center justify-center>
               <div class="mt-2">
-                <span style="font-size:12pt">{{movies[j-1].title}}</span>
+                <span >{{movies[j-1].title}}</span>
               </div>
               </v-layout>
           </v-flex>
@@ -53,12 +52,18 @@
           <v-card width='50%'>
             <v-card-title class="headline">{{movies[currentMovie].title}}</v-card-title>
             <v-chip v-for="item in genres" :key="item.id">{{show(item.name)}}</v-chip>
-            <v-card-text>{{movies[currentMovie].overview}}</v-card-text>
-            <v-progress-circular :rotate="90" :size="100" color="primary" :width="15" :value="Number((currentMovieDistant).toFixed(2))">{{ Number((currentMovieDistant).toFixed(2)) }}</v-progress-circular>
-            <v-rating v-model="currentMovieRating" half-increments length="5" hover></v-rating>
-            <v-card-actions>
-              <v-btn @click.stop="ratingData()">Rate</v-btn>
+            <v-card-text >{{movies[currentMovie].overview}}</v-card-text>
+            <div class="text-xs-center " style="padding-top: 20%">
+            <v-progress-circular class="text-xs-center " :rotate="90" :size="100" color="primary" :width="15" :value="Number((currentMovieDistant).toFixed(2))">{{ Number((currentMovieDistant).toFixed(2)) }}</v-progress-circular>
+            </div>
+            <v-rating  class="text-xs-center " v-model="currentMovieRating" half-increments length="5" hover></v-rating>
+            <v-layout align-center justify-center style="padding-top: 10%"> 
+
+            <v-card-actions >
+                <v-btn  @click.stop="ratingData()">Rate</v-btn>
             </v-card-actions>
+            </v-layout>
+
           </v-card>
         </v-layout>
       </v-container>
@@ -336,9 +341,9 @@
   }
 </script>
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Exo+2');
+  @import url('https://fonts.googleapis.com/css?family=Roboto:500');
   #app{
-    font-family: 'Exo 2', sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 
 </style>
