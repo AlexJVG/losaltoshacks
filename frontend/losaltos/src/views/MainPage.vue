@@ -34,7 +34,7 @@
             </v-hover>
               <v-layout align-center justify-center>
               <div class="mt-2">
-                <span >{{movies[j-1].title}}</span>
+                <span style="font-size:12pt">{{movies[j-1].title}}</span>
               </div>
               </v-layout>
           </v-flex>
@@ -335,9 +335,9 @@
   }
 </script>
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Roboto:500');
+  @import url('https://fonts.googleapis.com/css?family=Exo+2');
   #app{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Exo 2', sans-serif;
   }
 
 </style>
