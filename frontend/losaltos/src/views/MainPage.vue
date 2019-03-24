@@ -219,6 +219,8 @@
           console.log(result.data);
           if (result.data.data == null){
             this.currentMovieDistance = 0;
+          }else{
+            this.currentMovieDistance = result.data.data;
           }
         }).catch(error => {
           console.log(error)
