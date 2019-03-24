@@ -1,5 +1,5 @@
 <template id="app">
-  <v-app>
+  <v-app dark>
     <v-toolbar dense>
       <v-toolbar-title class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="sideBar = !sideBar"></v-toolbar-side-icon>
