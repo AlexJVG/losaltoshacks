@@ -128,7 +128,7 @@
         movies:[],
         currentMovie: 0,
         currentMovieRating: 1,
-        currentMovieDistance: null,
+        currentMovieDistance: 0,
         currentPage: 1,
         loggedIn: false,
         genres:[]
@@ -217,7 +217,9 @@
         .then(result => {
           console.log("work");
           console.log(result.data);
-          this.currentMovieDistance = result.data.data;
+          if (result.data.data == null){
+            this.currentMovieDistance = 0;
+          }
         }).catch(error => {
           console.log(error)
         });
