@@ -23,12 +23,12 @@ router.post('/account-info', async (req, res) => {
 
 router.post('/get-recommendations', async (req, res) => {
     let { username } = req.body;
-    let userWeights = (firebase.database().ref('/users/' + username + '/weights').once('value')).val();
-    let movies = firebase.database().ref('/movies');
+    let userWeights = (await firebase.database().ref('/users/' + username + '/weights').once('value')).val();
+    let movies = (await firebase.database().ref('/movies').once('value')).val();
     let recommendations = [];
 
     for (let movie in movies) {
-        let distance = distance(movies[movie].weights, userWeights);
+        let distance = getDistance(movies[movie].weights, userWeights);
         recommendations.push({
             movieId: movie,
             distance
@@ -52,7 +52,7 @@ router.post('/personal-rating', async (req, res) => {
         return res.send(responses.success('idk'));
     }
     
-    let distanceFromMovie = distance(movie.weights, user.weights || {});
+    let distanceFromMovie = getDistance(movie.weights, user.weights || {});
     let genresComparing = commonKeys(movie.weights, user.weights || {});
     let maxDistance = genresComparing ** .5;
     let percentRecommend = 100 * (1 - (distanceFromMovie / maxDistance));
@@ -109,7 +109,7 @@ router.post('/rate-movie', async (req, res) => {
         let weights = newMovie.weights;
         let userGenres = Object.keys(user.weights || {});
 
-        let distanceFromMovie = distance(weights, user.weights || {});
+        let distanceFromMovie = getDistance(weights, user.weights || {});
         distanceFromMovie = 1; // temp
 
         for (let i = 0; i < userGenres.length; i++) {
@@ -177,7 +177,7 @@ function sigmoid(x) {
     return 1 / (1 + (Math.E ** -x));
 }
 
-function distance(a, b) {
+function getDistance(a, b) {
     let total = 0;
 
     for (let key in a) {

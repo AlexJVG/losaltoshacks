@@ -438,6 +438,30 @@ export default {
             .catch(error => {
               console.log(error);
             });
+
+          axios
+            .post(
+              `http://${server}/api/get-recommendations`,
+              JSON.stringify({
+                username: this.username
+              }),
+              {
+                headers: { "Content-type": "application/json" }
+              }
+            )
+            .then(result => {
+
+              let rec = result.data.data;
+
+              for (let i = 0; i < rec.length; i++) {
+                rec[i].movie = this.movies.filter(m => m.id === parseInt(rec[i].movieId)).length > 0 ? this.movies.filter(m => m.id === parseInt(rec[i].movieId))[0].title : null;
+              }
+
+              console.log(result.data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
         }
       }
     }
